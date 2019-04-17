@@ -66,10 +66,10 @@ class Crawler
     protected $robotsTxt = null;
 
     /** @var string */
-    protected $crawlRequestFulfilledClass;
+    protected $crawlRequestFulfilledClass='CrawlRequestFulfilled';
 
     /** @var string */
-    protected $crawlRequestFailedClass;
+    protected $crawlRequestFailedClass='CrawlRequestFailed';
 
     /** @var float */
     protected $delayBetweenRequests = 0;
@@ -348,7 +348,7 @@ class Crawler
         }
 
         $this->depthTree = new Node((string) $this->baseUrl);
-        $this->print_mem();
+
         $this->startCrawlingQueue();
 
         foreach ($this->crawlObservers as $crawlObserver) {
