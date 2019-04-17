@@ -20,7 +20,7 @@ class Crawler
         $test=new  CrawlerTest();
         $test->resetLog();
 
-        $test->it_will_crawl_all_found_urls('Tuesday');
+        $test->it_will_crawl_all_found_urls('Wednesday_2','https://www.cnblogs.com/');
 
     }
    

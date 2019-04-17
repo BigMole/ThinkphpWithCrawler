@@ -66,10 +66,10 @@ class Crawler
     protected $robotsTxt = null;
 
     /** @var string */
-    protected $crawlRequestFulfilledClass='CrawlRequestFulfilled';
+    protected $crawlRequestFulfilledClass;
 
     /** @var string */
-    protected $crawlRequestFailedClass='CrawlRequestFailed';
+    protected $crawlRequestFailedClass;
 
     /** @var float */
     protected $delayBetweenRequests = 0;
@@ -388,14 +388,14 @@ class Crawler
     protected function startCrawlingQueue()
     {
         while ($this->crawlQueue->hasPendingUrls()) {
-            $this->print_mem();
+
             $pool = new Pool($this->client, $this->getCrawlRequests(), [
                 'concurrency' => $this->concurrency,
                 'options' => $this->client->getConfig(),
                 'fulfilled' => new $this->crawlRequestFulfilledClass($this),
                 'rejected' => new $this->crawlRequestFailedClass($this),
             ]);
-            $this->print_mem();
+
             $promise = $pool->promise();
 
             $promise->wait();

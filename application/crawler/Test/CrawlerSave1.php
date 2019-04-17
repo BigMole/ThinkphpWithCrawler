@@ -13,12 +13,12 @@ class CrawlerSave1 extends CrawlObserver
     protected $observerId ;
     public $file;
     public $dateTime;
-    public $filePath='runtime';
+    public $filePath=RUNTIME_PATH;
 
 
-    public function __construct( $observerId=''  )
+    public function __construct( $observerId  )
     {
-        $this->datetime=date('Y-m-d',time());
+        $this->dateTime = date('Y-m-d',time());
 
         $this->observerId = $observerId??'task'.$this->dateTime;
 
@@ -36,6 +36,7 @@ class CrawlerSave1 extends CrawlObserver
             $this->file->create_dir($logPath);
         }
         return $logPath;
+
     }
 
     /**
