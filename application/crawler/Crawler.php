@@ -115,7 +115,7 @@ class Crawler
         $this->concurrency = $concurrency;
 
         return $this;
-    }
+    }+
 
     public function setMaximumResponseSize(int $maximumResponseSizeInBytes): Crawler
     {

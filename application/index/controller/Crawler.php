@@ -2,6 +2,8 @@
 namespace app\index\controller;
 
 use  Spatie\Crawler\Test\CrawlerTest;
+use  Spatie\Crawler\Test\Observer\FilterClass;
+
 use  think\Log;
 
 class Crawler
@@ -18,12 +20,28 @@ class Crawler
     public function testCrawler()
     {
         $test=new  CrawlerTest();
-        $test->resetLog();
 
-        $test->it_will_crawl_all_found_urls('Wednesday_2','https://www.cnblogs.com/');
+        $test->CrawlerSubDomain('Thursday_sub','http://www.runoob.com');
 
     }
-   
+    /** @test */
+    public function testCrawlerJs()
+    {
+        $test=new  CrawlerTest();
+
+        $test->CrawlerSubDomainWithJs('Thursday_sub_js','http://www.runoob.com');
+
+    }
+   /** @test */
+    public function testCrawlerFilter()
+    {
+        $test=new  FilterClass();
+
+        $test->filter();
+        var_dump($test->urlsArr);
+
+    }
+
 
 
 			

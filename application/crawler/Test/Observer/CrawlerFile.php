@@ -1,5 +1,5 @@
 <?php
-namespace Spatie\Crawler\Test;
+namespace Spatie\Crawler\Test\Observer;
 
 class CrawlerFile {
 

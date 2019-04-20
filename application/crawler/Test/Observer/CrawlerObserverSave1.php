@@ -1,19 +1,21 @@
 <?php
-namespace Spatie\Crawler\Test;
+namespace Spatie\Crawler\Test\Observer;
+
 
 use Spatie\Crawler\CrawlObserver;
 use Spatie\Crawler\CrawlFile;
 use Psr\Http\Message\UriInterface;
 use Psr\Http\Message\ResponseInterface;
 use GuzzleHttp\Exception\RequestException;
+use Spatie\Crawler\Test\CrawlerTest;
 
-class CrawlerSave1 extends CrawlObserver
+class CrawlerObserverSave1 extends CrawlObserver
 {
     /** @var string */
     protected $observerId ;
     public $file;
     public $dateTime;
-    public $filePath=RUNTIME_PATH;
+    public $filePath='E:\\logs\\';
 
 
     public function __construct( $observerId  )
@@ -25,6 +27,8 @@ class CrawlerSave1 extends CrawlObserver
         $this->file=new CrawlerFile();
 
     }
+
+
 
     public function getLogPath(){
 
@@ -38,6 +42,10 @@ class CrawlerSave1 extends CrawlObserver
         return $logPath;
 
     }
+    public function getLogPrefix(){
+        return (time()/(6*6*24) )%100;// 一天分为100个日志
+    }
+
 
     /**
      * Called when the crawler will crawl the url.
@@ -50,6 +58,7 @@ class CrawlerSave1 extends CrawlObserver
         $logPath=$this->getLogPath();
         $fileName='willCrawler'.$this->observerId;
         $wholePath=$logPath.$fileName;
+
 
         $time=date('H:i:s',time());
         CrawlerTest::log($wholePath,$time."-willCrawl: {$url}");
@@ -68,7 +77,24 @@ class CrawlerSave1 extends CrawlObserver
         ResponseInterface $response,
         ?UriInterface $foundOnUrl = null
     ) {
-        $this->logCrawl($url, $foundOnUrl ,$response);
+        $time=date('H:i:s',time());
+        $logText = "{$time}:{$this->observerId}hasBeenCrawled: {$url}".PHP_EOL;
+        if ( (string) $foundOnUrl ) {
+            $logText .= " - found on {$foundOnUrl}".PHP_EOL;
+
+        }
+        if($response->getStatusCode() =='200'){
+            $logText .= (string)$response->getBody();
+        }else{
+            $logText .= 'Code:'.$response->getStatusCode();
+        }
+
+
+
+
+        $this->logCrawl($url, $foundOnUrl ,$logText);
+
+
     }
     public function crawlFailed(
         UriInterface $url,
@@ -77,33 +103,20 @@ class CrawlerSave1 extends CrawlObserver
     ) {
         $this->logCrawl($url, $foundOnUrl ,$requestException );
     }
-    protected function logCrawl(UriInterface $url, ?UriInterface $foundOnUrl,  $response)
+    protected function logCrawl(UriInterface $url, ?UriInterface $foundOnUrl,  $logText)
     {
+        //文件名路径生成
         $logPath=$this->getLogPath();
-        $fileName='afterCrawlered'.$this->observerId;
+        $fileName='afterCrawlered'.$this->observerId.'_'.$this->getLogPrefix();
         $wholePath=$logPath.$fileName;
-        $time=date('H:i:s',time());
-
-
-        $logText = "{$this->observerId}hasBeenCrawled: {$url}".PHP_EOL;
-        if ((string) $foundOnUrl) {
-            if( $response instanceof ResponseInterface ){
-                $logText .= " - found body on {$foundOnUrl}\n".(string)$response->getBody();
-            }else{
-                echo $logText;
-                $logText .= " - found on {$foundOnUrl}";
-            }
-
-        }
         CrawlerTest::log($wholePath,$logText);
     }
     /**
      * Called when the crawl has ended.
      */
     public function finishedCrawling()
-
     {   $logPath=$this->getLogPath();
-        $fileName='afterCrawlered'.$this->observerId;
+        $fileName='afterCrawlered'.$this->observerId.'_'.$this->getLogPrefix();
         $wholePath=$logPath.$fileName;
         $time=date('H:i:s',time());
         CrawlerTest::log($wholePath,"{$time}-{$this->observerId}finished crawling");
