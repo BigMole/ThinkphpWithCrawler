@@ -826,15 +826,56 @@ var _hmt = _hmt || [];
     }
 
 
+
+	//执行类
+	
+	public function generateCondition(){
+		
+		//并集 数组集合内是或的关系
+		$this->conditionsArrs=[
+			
+			[	//单条内部是且的关系
+				'idName'=>'',//id	
+				'tagName'=>'',	//html元素名称
+				'className'=>'',	//类名
+				'keyWord'=>'',	
+			],
+			
+		
+		
+		];										
+		
+	}	
+	
+	public function mergeStr($conditionArr){
+		$returnStr='';
+		$tagStr=!empty($conditionArr['tag'])?''.$conditionArr['tag']:'';
+		$idStr=!empty($conditionArr['id'])?'@id='.$conditionArr['id']:'';
+		$idStr=!empty($conditionArr['class'])?'@class='.$conditionArr['id']:'';
+		
+		
+		
+		
+		
+	}
+	
+
     public function filter(){
 
         $tempCrawler=new Crawler\Test\CrawlerTest('TESTID');
         $html=$this->str;
         $foundOnUrl= new Uri('http://localhost');
         $domCrawler = new DomCrawler( $html  , $foundOnUrl);
-
-        return collect($domCrawler->filterXpath('//a | //link[@rel="next" or @rel="prev"]')->links())
-            ->reject(function (Link $link) {
+		
+		foreach($this->conditionArr as $k=>$v){
+		
+		//对应于每一个条件进行组合xpath条件是
+		
+		
+		
+		
+        collect($domCrawler->filterXpath('//a | //link[@rel="next" or @rel="prev"]')->links())
+			->reject(function (Link $link) {
                 return $link->getNode()->getAttribute('rel') === 'nofollow';
             })
             ->map(function (Link $link) {
@@ -849,6 +890,10 @@ var _hmt = _hmt || [];
                 $this->urlsArr[]=$url->host;
             });;
 
+				
+			
+		}
+		
     }
 
 
