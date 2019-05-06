@@ -41,7 +41,7 @@ class CrawlerTest extends TestCase
 
         Crawler::create()
             ->setCrawlObserver(new FilterClass( $ObserverId ))
-            ->setMaximumDepth(2)
+            ->setMaximumDepth(10)
             ->setCrawlProfile(new CrawlSubdomains($baseUrl))
             ->startCrawling($baseUrl);
 

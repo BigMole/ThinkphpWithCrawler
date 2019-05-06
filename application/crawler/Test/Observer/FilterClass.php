@@ -20,10 +20,15 @@ class FilterClass{
     protected $observerId ;
     private $conditionArrs=[];
     private $urlsArr=[];
+    private static $writeTime=0;
+    private static $writeAppend=0;
     public $file;
     public $dateTime;
     public $filePath='E:\\logs\\';
 
+
+
+    const MAX_SIZE=1024*1024*5;
 
 
 	//执行类 ---TODO放入数据库中进行存储
@@ -132,8 +137,23 @@ class FilterClass{
         return $logPath;
 
     }
-    public function getLogPrefix(){
-        return (time()/(6*6*24) )%100;// 一天分为100个日志
+    public function getLogAppend(){
+
+        if( self::$writeTime > 100){
+            //文件名路径生成
+            $logPath=$this->getLogPath();
+            $fileName='afterCrawlered'.$this->observerId.'_'.$this->getLogPrefix();
+            $wholePath=$logPath.$fileName;
+            //对于日志较大的文件进行分割排序
+            if(is_file ($wholePath) && filesize($wholePath) > self::MAX_SIZE ){
+
+                self::$writeAppend++;
+                self::$writeTime=0;
+            }
+        }
+        self::$writeTime++;
+
+
     }
 
 
@@ -199,8 +219,9 @@ class FilterClass{
     {
         //文件名路径生成
         $logPath=$this->getLogPath();
-        $fileName='afterCrawlered'.$this->observerId.'_'.$this->getLogPrefix();
+        $fileName='afterCrawlered'.$this->observerId.'_'.self::$writeAppend;
         $wholePath=$logPath.$fileName;
+        $this->getLogAppend();//对于后缀数字进行判断
         CrawlerTest::log($wholePath,$logText);
     }
     /**
@@ -208,7 +229,7 @@ class FilterClass{
      */
     public function finishedCrawling()
     {   $logPath=$this->getLogPath();
-        $fileName='afterCrawlered'.$this->observerId.'_'.$this->getLogPrefix();
+        $fileName='afterCrawlered'.$this->observerId;
         $wholePath=$logPath.$fileName;
         $time=date('H:i:s',time());
         CrawlerTest::log($wholePath,"{$time}-{$this->observerId}finished crawling");

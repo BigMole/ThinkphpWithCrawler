@@ -32,12 +32,12 @@ class Crawler
         $test->CrawlerSubDomainWithJs('Thursday_sub_js','http://www.runoob.com');
 
     }
-   /** @test */
+   /** @test  */
     public function testCrawlerFilter()
     {
         $test=new  CrawlerTest();
 
-        $test->CrawlerSubDomain_1('FilterTest','https://www.cnblogs.com/');
+        $test->CrawlerSubDomain_1('FilterTest-1','https://www.cnblogs.com/');
 
     }
 
