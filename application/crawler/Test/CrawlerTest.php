@@ -9,6 +9,8 @@ use Psr\Http\Message\UriInterface;
 use Spatie\Browsershot\Browsershot;
 use Spatie\Crawler\CrawlSubdomains;
 use Spatie\Crawler\CrawlInternalUrls;
+use Spatie\Crawler\Test\Observer\FilterClass;
+
 class CrawlerTest extends TestCase
 {
 
@@ -28,6 +30,26 @@ class CrawlerTest extends TestCase
             ->startCrawling($baseUrl);
 
     }
+
+      /**
+     * @param $ObserverId 输入对应的ID值
+     * @param $baseUrl 输入对应的URL
+     *
+     */
+    public function  CrawlerSubDomain_1($ObserverId, $baseUrl )
+    {
+
+        Crawler::create()
+            ->setCrawlObserver(new FilterClass( $ObserverId ))
+            ->setMaximumDepth(2)
+            ->setCrawlProfile(new CrawlSubdomains($baseUrl))
+            ->startCrawling($baseUrl);
+
+    }
+
+
+
+
     /**
      * @param $ObserverId 输入对应的ID值
      * @param $baseUrl 输入对应的URL

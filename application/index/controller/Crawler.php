@@ -21,7 +21,7 @@ class Crawler
     {
         $test=new  CrawlerTest();
 
-        $test->CrawlerSubDomain('Thursday_sub','http://www.runoob.com');
+        $test->CrawlerSubDomain('Thursday_sub','http://www.suduak.com');
 
     }
     /** @test */
@@ -35,10 +35,9 @@ class Crawler
    /** @test */
     public function testCrawlerFilter()
     {
-        $test=new  FilterClass();
+        $test=new  CrawlerTest();
 
-        $test->filter();
-        var_dump($test->urlsArr);
+        $test->CrawlerSubDomain_1('FilterTest','https://www.cnblogs.com/');
 
     }
 

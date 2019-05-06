@@ -115,7 +115,7 @@ class Crawler
         $this->concurrency = $concurrency;
 
         return $this;
-    }+
+    }
 
     public function setMaximumResponseSize(int $maximumResponseSizeInBytes): Crawler
     {
@@ -429,7 +429,9 @@ class Crawler
             }
 
             foreach ($this->crawlObservers as $crawlObserver) {
+
                 $crawlObserver->willCrawl($crawlUrl->url);
+
             }
 
             $this->crawlQueue->markAsProcessed($crawlUrl);
@@ -440,6 +442,7 @@ class Crawler
 
     public function addToCrawlQueue(CrawlUrl $crawlUrl): Crawler
     {
+
         if (! $this->getCrawlProfile()->shouldCrawl($crawlUrl->url)) {
             return $this;
         }

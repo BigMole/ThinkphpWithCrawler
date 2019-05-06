@@ -576,6 +576,7 @@ class Crawler implements \Countable, \IteratorAggregate
      */
     public function text()
     {
+
         if (!$this->nodes) {
             throw new \InvalidArgumentException('The current node list is empty.');
         }
@@ -1128,6 +1129,7 @@ class Crawler implements \Countable, \IteratorAggregate
         $namespaces = $domxpath->query(sprintf('(//namespace::*[name()="%s"])[last()]', $this->defaultNamespacePrefix === $prefix ? '' : $prefix));
 
         if ($node = $namespaces->item(0)) {
+
             return $node->nodeValue;
         }
 
@@ -1166,6 +1168,7 @@ class Crawler implements \Countable, \IteratorAggregate
     private function createCssSelectorConverter(): CssSelectorConverter
     {
         if (!\class_exists(CssSelectorConverter::class)) {
+
             throw new \LogicException('To filter with a CSS selector, install the CssSelector component ("composer require symfony/css-selector"). Or use filterXpath instead.');
         }
 
